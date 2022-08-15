@@ -1,0 +1,49 @@
+{
+  "name": "vinted-scraper",
+  "version": "1.0.0",
+  "description": "A module to interaction with Vinted API with proxy support.",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "author": "ZyXProFR",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https//github.com/zyxprofr/vinted-scraper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zyxprofr/vinted-scraper/issues"
+  },
+  "homepage": "https://github.com/zyxprofr/vinted-scraper",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "c8": "^7.12.0",
+    "dotenv": "^16.0.1",
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^3.4.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "^4.7.4",
+    "vitest": "^0.21.1"
+  },
+  "dependencies": {
+    "https-proxy-agent": "^5.0.1",
+    "node-fetch": "^3.2.10"
+  }
+}

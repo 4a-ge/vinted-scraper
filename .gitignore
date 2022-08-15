@@ -1,0 +1,17 @@
+/*
+/*/
+!/src/
+!/__tests__/
+!.github
+!/.vscode/
+!.env.example
+!.eslintignore
+!.eslintrc.json
+!.gitignore
+!.prettierignore
+!.prettierrc.json
+!LICENSE
+!package.json
+!README.md
+!tsconfig.json
+!vitest.config.ts
