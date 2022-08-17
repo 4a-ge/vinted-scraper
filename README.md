@@ -6,29 +6,16 @@ This module will help you to interact with the Vinted API.
 
 ## Example :
 
-Without proxy :
 ```javascript
 import VintedScraper from "vinted-scraper"
 
-const vintedScraper = new VintedScraper();
+const vintedScraper = new VintedScraper(); // Or new VintedScraper([ "proxy1:3128:user1:pass" ]) to use proxy.
 
 vintedScraper.search("https://vinted.fr/vetements?search_text=pantalon&order=newest_first").then(res => {
   // Do something ...
 });
-```
 
-With proxy :
-```javascript
-import VintedScraper from "vinted-scraper"
-
-/**
- * IP:PORT:USERNAME:PASSWORD
- */ 
-const proxies = [ "127.0.0.1:3128", "127.0.0.1:3129:user1:pass1" ];
-
-const vintedScraper = new VintedScraper(proxies);
-
-vintedScraper.search("https://vinted.fr/vetements?search_text=pantalon&order=newest_first").then(res => {
+vintedScraper.fetchUser("1").then(user => {
   // Do something ...
 });
 ```
