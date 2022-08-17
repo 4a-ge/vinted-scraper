@@ -23,6 +23,12 @@ export default class VintedScraper {
     }
   }
 
+  /**
+   * Search for new products.
+   *
+   * @param url { string } URL to search.
+   * @returns { VintedSearchResult } Result of search.
+   */
   async search(url: string): Promise<VintedSearchResult> {
     const queryString = this.#getQueryParameters(url);
 
