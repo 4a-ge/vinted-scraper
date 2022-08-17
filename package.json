@@ -1,6 +1,6 @@
 {
   "name": "vinted-scraper",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A module to interact with Vinted API with proxy support.",
   "scripts": {
     "build": "tsc",
