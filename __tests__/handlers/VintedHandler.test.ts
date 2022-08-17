@@ -30,4 +30,24 @@ describe("vinted handler tests", async () => {
     await expect(vintedScraper.search("https://www.vinted.fr/vetements")).rejects.toThrowError("Invalid URI parameters");
     await expect(vintedScraper.search("https://www.vinted.fr/vetements?search")).rejects.toThrowError("Invalid URI parameters")
   })
+
+  it("should return valid user", async () => {
+    const vintedScraper = new VintedScraper();
+    const userData = await vintedScraper.fetchUser(1);
+
+    expect(userData.user.anon_id).toBe("7da126c4-764b-42a7-9170-67cfe3d0e32b")
+  })
+
+  it("should return valid user with proxy", async () => {
+    const vintedScraper = new VintedScraper([ `${process.env.VITEST_PROXY}` ]);
+    const userData = await vintedScraper.fetchUser(1);
+
+    expect(userData.user.anon_id).toBe("7da126c4-764b-42a7-9170-67cfe3d0e32b")
+  })
+
+  it("should return not found user", async () => {
+    const vintedScraper = new VintedScraper();
+
+    await expect(vintedScraper.fetchUser(0)).rejects.toThrowError("User not found");
+  });
 });
