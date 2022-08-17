@@ -2,6 +2,7 @@ import HttpsProxyAgent from "https-proxy-agent";
 import fetch from "node-fetch";
 import type { VintedSearchResult } from "../types/VintedSearchResult.js";
 import ProxyHandler from "./ProxyHandler.js";
+import type { VintedUser } from "../types/VintedUser.js";
 
 export default class VintedScraper {
   /**
@@ -66,6 +67,56 @@ export default class VintedScraper {
     if (json.message_code === "invalid_authentication_token") {
       await this.#fetchSessionCookie();
       throw new Error("Fetching new cookie.");
+    }
+
+    return json;
+  }
+
+  /**
+   * Search for user data.
+   *
+   * @param id { number } ID of user.
+   * @returns { VintedUser } Data of user.
+   */
+  async fetchUser(id: number): Promise<VintedUser> {
+    /**
+     * Fetch new session cookie if needed.
+     */
+    if (!this.#sessionCookie) {
+      await this.#fetchSessionCookie();
+    }
+
+    let proxy = "";
+
+    /**
+     * Get proxy if available.
+     */
+    if (this.#proxyHandler) {
+      proxy = this.#proxyHandler.getProxy();
+    }
+
+    const res = await fetch(`https://www.vinted.be/api/v2/users/${id}`, {
+      headers: {
+        cookie: `_vinted_fr_session=${this.#sessionCookie}`,
+      },
+      agent: proxy !== "" ? HttpsProxyAgent(proxy) : undefined,
+    });
+
+    const text = await res.text();
+
+    if (text.includes("Request rate limit exceeded")) {
+      throw new Error("Request rate limit exceeded");
+    }
+
+    const json = JSON.parse(text);
+
+    if (json.message_code === "invalid_authentication_token") {
+      await this.#fetchSessionCookie();
+      throw new Error("Fetching new cookie.");
+    }
+
+    if (json.message_code === "not_found") {
+      throw new Error("User not found");
     }
 
     return json;
