@@ -50,4 +50,24 @@ describe("vinted handler tests", async () => {
 
     await expect(vintedScraper.fetchUser(0)).rejects.toThrowError("User not found");
   });
+
+  it("should return valid item", async () => {
+    const vintedScraper = new VintedScraper();
+    const itemData = await vintedScraper.fetchItem(100000000);
+
+    expect(itemData.item.user_id).toBe(17500877)
+  })
+
+  it("should return valid item with proxy", async () => {
+    const vintedScraper = new VintedScraper([ `${process.env.VITEST_PROXY}` ]);
+    const itemData = await vintedScraper.fetchItem(100000000);
+
+    expect(itemData.item.user_id).toBe(17500877)
+  })
+
+  it("should return not found item", async () => {
+    const vintedScraper = new VintedScraper();
+
+    await expect(vintedScraper.fetchItem(0)).rejects.toThrowError("Item not found");
+  });
 });
