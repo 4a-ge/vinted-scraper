@@ -22,13 +22,14 @@ describe("vinted handler tests", async () => {
     await expect(vintedScraper.search("https://vin.fr")).rejects.toThrowError("Invalid URI format")
     await expect(vintedScraper.search("https://fr.vinted")).rejects.toThrowError("Invalid URI format")
     await expect(vintedScraper.search("http://vinted.fr")).rejects.toThrowError("Invalid URI format")
+    await expect(vintedScraper.search("https://vinted.fr")).rejects.toThrowError("Invalid URI format")
+    await expect(vintedScraper.search("http://vinted.fr/vetements?search_text=pantalon test")).rejects.toThrowError("Invalid URI format")
   })
 
   it("should throw invalid uri parameters", async () => {
     const vintedScraper = new VintedScraper();
-
-    await expect(vintedScraper.search("https://www.vinted.fr/vetements")).rejects.toThrowError("Invalid URI parameters");
-    await expect(vintedScraper.search("https://www.vinted.fr/vetements?search")).rejects.toThrowError("Invalid URI parameters")
+    
+    await expect(vintedScraper.search("https://www.vinted.fr/vetements?search_text")).rejects.toThrowError("Invalid URI parameters")
   })
 
   it("should return valid user", async () => {
