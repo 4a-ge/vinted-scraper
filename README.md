@@ -28,7 +28,7 @@ vintedScraper.fetchUser(1).then(user => {
 /**
  * Search for item data.
  */
-vintedScraper.fetchItem(100000000)).then(user => {
+vintedScraper.fetchItem(100000000).then(item => {
   // Do something ...
 });
 ```
