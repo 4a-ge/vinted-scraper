@@ -59,7 +59,7 @@ export default class VintedScraper {
 
     const text = await res.text();
 
-    if (text.includes("Request rate limit exceeded")) {
+    if (text.includes("Request rate limit exceeded") || text.startsWith("<")) {
       throw new Error("Request rate limit exceeded");
     }
 
@@ -105,7 +105,7 @@ export default class VintedScraper {
 
     const text = await res.text();
 
-    if (text.includes("Request rate limit exceeded")) {
+    if (text.includes("Request rate limit exceeded") || text.startsWith("<")) {
       throw new Error("Request rate limit exceeded");
     }
 
@@ -155,7 +155,7 @@ export default class VintedScraper {
 
     const text = await res.text();
 
-    if (text.includes("Request rate limit exceeded")) {
+    if (text.includes("Request rate limit exceeded") || text.startsWith("<")) {
       throw new Error("Request rate limit exceeded");
     }
 
