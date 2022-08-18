@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 import type { VintedSearchResult } from "../types/VintedSearchResult.js";
 import ProxyHandler from "./ProxyHandler.js";
 import type { VintedUser } from "../types/VintedUser.js";
+import type { VintedItem } from "../types/VintedItem.js";
 
 export default class VintedScraper {
   /**
@@ -123,6 +124,56 @@ export default class VintedScraper {
   }
 
   /**
+   * Search for item data.
+   *
+   * @param id { number } ID of item.
+   * @returns { VintedItem } Data of item.
+   */
+  async fetchItem(id: number): Promise<VintedItem> {
+    /**
+     * Fetch new session cookie if needed.
+     */
+    if (!this.#sessionCookie) {
+      await this.#fetchSessionCookie();
+    }
+
+    let proxy = "";
+
+    /**
+     * Get proxy if available.
+     */
+    if (this.#proxyHandler) {
+      proxy = this.#proxyHandler.getProxy();
+    }
+
+    const res = await fetch(`https://www.vinted.de/api/v2/items/${id}`, {
+      headers: {
+        cookie: `_vinted_fr_session=${this.#sessionCookie}`,
+      },
+      agent: proxy !== "" ? HttpsProxyAgent(proxy) : undefined,
+    });
+
+    const text = await res.text();
+
+    if (text.includes("Request rate limit exceeded")) {
+      throw new Error("Request rate limit exceeded");
+    }
+
+    const json = JSON.parse(text);
+
+    if (json.message_code === "invalid_authentication_token") {
+      await this.#fetchSessionCookie();
+      throw new Error("Fetching new cookie.");
+    }
+
+    if (json.message_code === "not_found") {
+      throw new Error("Item not found");
+    }
+
+    return json;
+  }
+
+  /**
    * Get query parameters from URL.
    *
    * @param url { string } URL
@@ -142,7 +193,6 @@ export default class VintedScraper {
      * Check if URI contains a query string.
      */
     if (URI.split("?").length !== 2) {
-      console.log(URI.split("?").length);
       throw new Error("Invalid URI parameters");
     }
 
