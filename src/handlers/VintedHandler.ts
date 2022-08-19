@@ -191,7 +191,7 @@ export default class VintedScraper {
     /**
      * Check if is Vinted URI.
      */
-    if (!URI.match(/^https:\/\/www\.vinted\.([a-z]+)\/vetements\?[^\s]+/)) {
+    if (!URI.match(/^https:\/\/www\.vinted\.([a-z]+)\/(vetements|catalog)\?[^\s]+/)) {
       throw new Error("Invalid URI format");
     }
 
