@@ -133,4 +133,5 @@ export interface VintedSearchResult {
   search_tracking_params: SearchTrackingParams2;
   pagination: Pagination;
   code: number;
+  proxy?: string;
 }

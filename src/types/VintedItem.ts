@@ -338,4 +338,5 @@ export interface Item {
 export interface VintedItem {
   item: Item;
   code: number;
+  proxy: string;
 }

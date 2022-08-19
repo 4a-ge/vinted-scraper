@@ -155,4 +155,5 @@ export interface User {
 export interface VintedUser {
   user: User;
   code: number;
+  proxy: string;
 }

@@ -65,6 +65,8 @@ export default class VintedScraper {
 
     const json = JSON.parse(text);
 
+    if (proxy !== "") json.proxy = proxy;
+
     if (json.message_code === "invalid_authentication_token") {
       await this.#fetchSessionCookie();
       throw new Error("Fetching new cookie.");
@@ -110,6 +112,8 @@ export default class VintedScraper {
     }
 
     const json = JSON.parse(text);
+
+    if (proxy !== "") json.proxy = proxy;
 
     if (json.message_code === "invalid_authentication_token") {
       await this.#fetchSessionCookie();
@@ -160,6 +164,8 @@ export default class VintedScraper {
     }
 
     const json = JSON.parse(text);
+
+    if (proxy !== "") json.proxy = proxy;
 
     if (json.message_code === "invalid_authentication_token") {
       await this.#fetchSessionCookie();
