@@ -49,7 +49,7 @@ describe("vinted handler tests", async () => {
   it("should return not found user", async () => {
     const vintedScraper = new VintedScraper();
 
-    await expect(vintedScraper.fetchUser(0)).rejects.toThrowError("User not found");
+    await expect(vintedScraper.fetchUser(0)).rejects.toThrowError("not_found");
   });
 
   it("should return valid item", async () => {
@@ -69,6 +69,6 @@ describe("vinted handler tests", async () => {
   it("should return not found item", async () => {
     const vintedScraper = new VintedScraper();
 
-    await expect(vintedScraper.fetchItem(0)).rejects.toThrowError("Item not found");
+    await expect(vintedScraper.fetchItem(0)).rejects.toThrowError("not_found");
   });
 });
