@@ -56,6 +56,12 @@ export default class VintedScraper {
     return (await this.#request(`https://www.vinted.de/api/v2/items/${id}`)) as VintedItem;
   }
 
+  /**
+   * Do request with default verification.
+   *
+   * @param url { string } URL to request.
+   * @returns { Promise<VintedSearchResult | VintedUser | VintedItem> } Result.
+   */
   async #request(url: string): Promise<VintedSearchResult | VintedUser | VintedItem> {
     /**
      * Fetch new session cookie if needed.
