@@ -158,8 +158,10 @@ export default class VintedScraper {
      * Format final parameters string.
      */
     Object.keys(paramsObject!).forEach(paramObject => {
-      if (finalParams !== "") finalParams += `&${paramObject}=${paramsObject[paramObject]}`;
-      else finalParams += `${paramObject}=${paramsObject[paramObject]}`;
+      if (paramObject !== "time") {
+        if (finalParams !== "") finalParams += `&${paramObject}=${paramsObject[paramObject]}`;
+        else finalParams += `${paramObject}=${paramsObject[paramObject]}`;
+      }
     });
 
     return finalParams;
