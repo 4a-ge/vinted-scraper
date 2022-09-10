@@ -75,7 +75,7 @@ export default class VintedScraper {
         }
 
         fetch(url, { agent: proxy !== "" ? HttpsProxyAgent(proxy) : undefined });
-      } finally {
+      } catch {
         i -= 1;
       }
     }
