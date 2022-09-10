@@ -57,6 +57,31 @@ export default class VintedScraper {
   }
 
   /**
+   * Boost views of an item.
+   *
+   * @param url { string } Link of item to boost.
+   * @param views { number } Total views to add.
+   */
+  async boostItem(url: string, views: number) {
+    for (let i = 0; i < views; i += 1) {
+      try {
+        let proxy = "";
+
+        /**
+         * Get proxy if available.
+         */
+        if (this.#proxyHandler) {
+          proxy = this.#proxyHandler.getProxy();
+        }
+
+        fetch(url, { agent: proxy !== "" ? HttpsProxyAgent(proxy) : undefined });
+      } finally {
+        i -= 1;
+      }
+    }
+  }
+
+  /**
    * Do request with default verification.
    *
    * @param url { string } URL to request.
