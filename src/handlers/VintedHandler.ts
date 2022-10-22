@@ -113,8 +113,12 @@ export default class VintedScraper {
 
     const text = await res.text();
 
-    if (text.includes("Request rate limit exceeded") || text.startsWith("<")) {
+    if (text.includes("Request rate limit exceeded")) {
       throw new Error("Request rate limit exceeded");
+    }
+
+    if (text.includes("<")) {
+      throw new Error("Bad Gateway");
     }
 
     const json = JSON.parse(text);
@@ -123,7 +127,7 @@ export default class VintedScraper {
 
     if (json.message_code === "invalid_authentication_token") {
       await this.#fetchSessionCookie();
-      throw new Error("Fetching new cookie.");
+      return this.#request(url);
     }
 
     if (json.message_code === "not_found") {
