@@ -12,6 +12,9 @@
 !.prettierrc.json
 !LICENSE
 !package.json
+!package-lock.json
 !README.md
 !tsconfig.json
 !vitest.config.ts
+!.npmrc
+!.nvmrc

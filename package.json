@@ -1,6 +1,6 @@
 {
   "name": "@4a-ge/vinted-scraper",
-  "version": "1.4.1",
+  "version": "1.4.0",
   "description": "A module to interact with Vinted API with proxy support.",
   "scripts": {
     "build": "tsc",
@@ -23,9 +23,6 @@
     "url": "https://github.com/4a-ge/vinted-scraper/issues"
   },
   "homepage": "https://github.com/4a-ge/vinted-scraper",
-  "publishConfig": {
-    "access": "public"
-  },
   "keywords": [
     "vinted",
     "scraper",
