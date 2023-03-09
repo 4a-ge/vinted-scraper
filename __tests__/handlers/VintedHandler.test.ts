@@ -9,7 +9,7 @@ describe("vinted handler tests", async () => {
     expect(result.items.length).toBeGreaterThan(0);
   });
 
-  it("should return array of items with proxy", async () => {
+  it.skipIf(process.env.VITEST_PROXY === undefined)("should return array of items with proxy", async () => {
     const vintedScraper = new VintedScraper([ `${process.env.VITEST_PROXY}` ]);
     const result = await vintedScraper.search("https://www.vinted.fr/vetements?search_text=dunk%20sb%20dodgers&catalog[]=214&catalog[]=1242&brand_id[]=53&price_to=220&currency=EUR&status[]=6&order=newest_first");
 
@@ -39,7 +39,7 @@ describe("vinted handler tests", async () => {
     expect(userData.user.anon_id).toBe("7da126c4-764b-42a7-9170-67cfe3d0e32b")
   })
 
-  it("should return valid user with proxy", async () => {
+  it.skipIf(process.env.VITEST_PROXY === undefined)("should return valid user with proxy", async () => {
     const vintedScraper = new VintedScraper([ `${process.env.VITEST_PROXY}` ]);
     const userData = await vintedScraper.fetchUser(1);
 
@@ -59,7 +59,7 @@ describe("vinted handler tests", async () => {
     expect(itemData.item.user_id).toBe(17500877)
   })
 
-  it("should return valid item with proxy", async () => {
+  it.skipIf(process.env.VITEST_PROXY === undefined)("should return valid item with proxy", async () => {
     const vintedScraper = new VintedScraper([ `${process.env.VITEST_PROXY}` ]);
     const itemData = await vintedScraper.fetchItem(100000000);
 
