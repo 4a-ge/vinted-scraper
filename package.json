@@ -1,10 +1,11 @@
 {
-  "name": "vinted-scraper",
-  "version": "1.3.2",
+  "name": "@4a-ge/vinted-scraper",
+  "version": "1.4.0",
   "description": "A module to interact with Vinted API with proxy support.",
   "scripts": {
     "build": "tsc",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepublishOnly": "npm run build"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,12 +17,12 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https//github.com/zyxprofr/vinted-scraper.git"
+    "url": "https://github.com/4a-ge/vinted-scraper.git"
   },
   "bugs": {
-    "url": "https://github.com/zyxprofr/vinted-scraper/issues"
+    "url": "https://github.com/4a-ge/vinted-scraper/issues"
   },
-  "homepage": "https://github.com/zyxprofr/vinted-scraper",
+  "homepage": "https://github.com/4a-ge/vinted-scraper",
   "publishConfig": {
     "access": "public"
   },
