@@ -2,8 +2,12 @@ import HttpsProxyAgent from "https-proxy-agent";
 import fetch from "node-fetch";
 import type { VintedSearchResult } from "../types/VintedSearchResult.js";
 import ProxyHandler from "./ProxyHandler.js";
-import type { VintedUser } from "../types/VintedUser.js";
-import type { VintedItem } from "../types/VintedItem.js";
+import type { VintedUserResponse } from "../types/VintedUser.js";
+import type { VintedUserItemsResponse } from "../types/VintedUserItems";
+import type { VintedItemResponse } from "../types/VintedItem.js";
+import getQueryParameters from "./getQueryParameters.js";
+
+type VintedLocale = "pl" | "de" | "be" | "fr";
 
 export default class VintedScraper {
   /**
@@ -16,13 +20,16 @@ export default class VintedScraper {
    */
   #sessionCookie?: string;
 
-  constructor(proxies?: string[]) {
+  #vintedLocale?: VintedLocale;
+
+  constructor(proxies?: string[], locale: VintedLocale = "fr") {
     /**
      * Check if user has given proxies.
      */
     if (proxies instanceof Array<string>) {
       this.#proxyHandler = new ProxyHandler(proxies);
     }
+    this.#vintedLocale = locale;
   }
 
   /**
@@ -32,28 +39,36 @@ export default class VintedScraper {
    * @returns { VintedSearchResult } Result of search.
    */
   async search(url: string): Promise<VintedSearchResult> {
-    const queryString = this.#getQueryParameters(url);
-    return (await this.#request(`https://www.vinted.be/api/v2/catalog/items?${queryString}`)) as VintedSearchResult;
+    const queryString = getQueryParameters(url);
+    return this.#request<VintedSearchResult>(
+      `https://www.vinted.${this.#vintedLocale}/api/v2/catalog/items?${queryString}`
+    );
   }
 
   /**
    * Search for user data.
    *
    * @param id { number } ID of user.
-   * @returns { VintedUser } Data of user.
+   * @returns { VintedUserResponse } Data of user.
    */
-  async fetchUser(id: number): Promise<VintedUser> {
-    return (await this.#request(`https://www.vinted.be/api/v2/users/${id}`)) as VintedUser;
+  async fetchUser(id: number): Promise<VintedUserResponse> {
+    return this.#request<VintedUserResponse>(`https://www.vinted.${this.#vintedLocale}/api/v2/users/${id}`);
+  }
+
+  async fetchUserItems(id: number): Promise<VintedUserItemsResponse> {
+    const itemsPerPage = 200000;
+    const url = `https://www.vinted.${this.#vintedLocale}/api/v2/users/${id}/items?page=1&per_page=${itemsPerPage}`;
+    return this.#request<VintedUserItemsResponse>(url);
   }
 
   /**
    * Search for item data.
    *
    * @param id { number } ID of item.
-   * @returns { VintedItem } Data of item.
+   * @returns { VintedItemResponse } Data of item.
    */
-  async fetchItem(id: number): Promise<VintedItem> {
-    return (await this.#request(`https://www.vinted.de/api/v2/items/${id}`)) as VintedItem;
+  async fetchItem(id: number): Promise<VintedItemResponse> {
+    return this.#request<VintedItemResponse>(`https://www.vinted.${this.#vintedLocale}/api/v2/items/${id}`);
   }
 
   /**
@@ -62,7 +77,7 @@ export default class VintedScraper {
    * @param url { string } Link of item to boost.
    * @param views { number } Total views to add.
    */
-  async boostItem(url: string, views: number) {
+  async boostItem(url: string, views: number): Promise<void> {
     for (let i = 0; i < views; i += 1) {
       try {
         let proxy = "";
@@ -84,10 +99,11 @@ export default class VintedScraper {
   /**
    * Do request with default verification.
    *
+   * @template RESPONSE_TYPE
    * @param url { string } URL to request.
-   * @returns { Promise<VintedSearchResult | VintedUser | VintedItem> } Result.
+   * @returns { Promise<RESPONSE_TYPE> } Response.
    */
-  async #request(url: string): Promise<VintedSearchResult | VintedUser | VintedItem> {
+  async #request<RESPONSE_TYPE>(url: string): Promise<RESPONSE_TYPE> {
     /**
      * Fetch new session cookie if needed.
      */
@@ -134,72 +150,13 @@ export default class VintedScraper {
       throw new Error("not_found");
     }
 
-    return json;
-  }
-
-  /**
-   * Get query parameters from URL.
-   *
-   * @param url { string } URL
-   * @returns { string } Query parameters.
-   */
-  #getQueryParameters(url: string): string {
-    const URI = decodeURI(url);
-
-    /**
-     * Check if is Vinted URI.
-     */
-    if (!URI.match(/^https:\/\/(www.)?vinted\.([a-z]+)\/(vetements|catalog)\?[^\s]+/)) {
-      throw new Error("Invalid URI format");
-    }
-
-    /**
-     * Check if URI contains a query string.
-     */
-    if (URI.split("?").length !== 2) {
-      throw new Error("Invalid URI parameters");
-    }
-
-    const queryString = URI.split("?")[1]!
-      .replaceAll("catalog[]", "catalog_id[]")
-      .replaceAll("status[]", "status_id[]")
-      .replaceAll("[]", "s");
-
-    const params = queryString.split("&");
-    const paramsObject: { [index: string]: string } = {};
-
-    /**
-     * Organize parameters.
-     */
-    params.forEach(param => {
-      if (param.split("=").length !== 2) {
-        throw new Error(`Invalid URI parameters: ${param}`);
-      }
-
-      if (paramsObject[param.split("=")[0] as string])
-        paramsObject[param.split("=")[0] as string] += `,${param.split("=")[1]}`;
-      else paramsObject[param.split("=")[0] as string] = `${param.split("=")[1]}`;
-    });
-
-    let finalParams = "";
-
-    /**
-     * Format final parameters string.
-     */
-    Object.keys(paramsObject!).forEach(paramObject => {
-      if (paramObject !== "time") {
-        if (finalParams !== "") finalParams += `&${paramObject}=${paramsObject[paramObject]}`;
-        else finalParams += `${paramObject}=${paramsObject[paramObject]}`;
-      }
-    });
-
-    return finalParams;
+    return json as RESPONSE_TYPE;
   }
 
   /**
    * Fetch new session cookie.
    */
-  async #fetchSessionCookie() {
+  async #fetchSessionCookie(): Promise<void> {
     let proxy = "";
 
     /**
@@ -212,7 +169,10 @@ export default class VintedScraper {
     /**
      * Request to fetch session cookie.
      */
-    const res = await fetch("https://vinted.de", proxy !== "" ? { agent: HttpsProxyAgent(proxy) } : undefined);
+    const res = await fetch(
+      `https://vinted.${this.#vintedLocale}`,
+      proxy !== "" ? { agent: HttpsProxyAgent(proxy) } : undefined
+    );
 
     /**
      * Check if _vinted_fr_session cookie exists.

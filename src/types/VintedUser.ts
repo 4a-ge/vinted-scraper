@@ -1,3 +1,5 @@
+import type { VintedResponse } from "./VintedResponse";
+
 export interface Thumbnail {
   type: string;
   url: string;
@@ -74,7 +76,7 @@ export interface User {
   id: number;
   anon_id: string;
   login: string;
-  real_name?: any;
+  real_name?: any | null;
   email?: any;
   birthday?: any;
   gender: string;
@@ -152,8 +154,6 @@ export interface User {
   default_address?: any;
 }
 
-export interface VintedUser {
+export interface VintedUserResponse extends VintedResponse {
   user: User;
-  code: number;
-  proxy: string;
 }

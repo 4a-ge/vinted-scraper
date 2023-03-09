@@ -1,9 +1,11 @@
+import type { VintedResponse } from "./VintedResponse";
+
 export interface Thumbnail {
   type: string;
   url: string;
   width: number;
   height: number;
-  original_size?: boolean;
+  original_size?: boolean | null;
 }
 
 export interface HighResolution {
@@ -26,6 +28,7 @@ export interface Photo {
   is_suspicious: boolean;
   full_size_url: string;
   is_hidden: boolean;
+  extra: unknown;
 }
 
 export interface Thumbnail2 {
@@ -57,6 +60,7 @@ export interface Photo2 {
   high_resolution: HighResolution2;
   full_size_url: string;
   is_hidden: boolean;
+  extra?: unknown;
 }
 
 export interface Discount {
@@ -79,7 +83,7 @@ export interface Email {
 }
 
 export interface Facebook {
-  valid: boolean;
+  valid: boolean | null;
   verified_at: Date;
   available: boolean;
 }
@@ -114,11 +118,16 @@ export interface AcceptedPayInMethod {
   note: string;
 }
 
+export interface Price {
+  amount: string;
+  currency_code: string;
+}
+
 export interface User {
   id: number;
   anon_id: string;
   login: string;
-  real_name?: any;
+  real_name?: any | null;
   email?: any;
   birthday?: any;
   gender: string;
@@ -293,8 +302,8 @@ export interface Item {
   user: User;
   service_fee: string;
   total_item_price: string;
-  price: string;
-  discount_price: string;
+  price: Price;
+  discount_price: string | null;
   real_value: string;
   can_edit: boolean;
   can_delete: boolean;
@@ -335,8 +344,6 @@ export interface Item {
   free_return_img: string;
 }
 
-export interface VintedItem {
+export interface VintedItemResponse extends VintedResponse {
   item: Item;
-  code: number;
-  proxy: string;
 }

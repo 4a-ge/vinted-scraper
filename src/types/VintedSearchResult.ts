@@ -1,16 +1,5 @@
-export interface Thumbnail {
-  type: string;
-  url: string;
-  width: number;
-  height: number;
-  original_size?: any;
-}
-
-export interface HighResolution {
-  id: string;
-  timestamp: number;
-  orientation?: any;
-}
+import type { HighResolution, HighResolution2, Thumbnail, Thumbnail2 } from "./VintedItem";
+import type { VintedPaginatedResponse } from "./VintedResponse";
 
 export interface Photo {
   id: number;
@@ -29,42 +18,28 @@ export interface Photo {
   is_hidden: boolean;
 }
 
+export interface Photo2 {
+  dominant_color: string;
+  dominant_color_opaque: string;
+  full_size_url: string;
+  height: number;
+  high_resolution: HighResolution2;
+  id: any;
+  image_no: number;
+  is_hidden: boolean;
+  is_main: boolean;
+  is_suspicious: boolean;
+  thumbnails: Thumbnail2[];
+  url: string;
+  width: number;
+}
+
 export interface User {
   id: number;
   login: string;
   business: boolean;
   profile_url: string;
   photo: Photo;
-}
-
-export interface Thumbnail2 {
-  type: string;
-  url: string;
-  width: number;
-  height: number;
-  original_size?: boolean;
-}
-
-export interface HighResolution2 {
-  id: string;
-  timestamp: number;
-  orientation?: number;
-}
-
-export interface Photo2 {
-  id: any;
-  image_no: number;
-  width: number;
-  height: number;
-  dominant_color: string;
-  dominant_color_opaque: string;
-  url: string;
-  is_main: boolean;
-  thumbnails: Thumbnail2[];
-  high_resolution: HighResolution2;
-  is_suspicious: boolean;
-  full_size_url: string;
-  is_hidden: boolean;
 }
 
 export interface SearchTrackingParams {
@@ -75,7 +50,6 @@ export interface SearchTrackingParams {
 export interface Item {
   id: number;
   title: string;
-  price: string;
   discount?: any;
   currency: string;
   brand_title: string;
@@ -119,19 +93,8 @@ export interface SearchTrackingParams2 {
   global_search_session_id: string;
 }
 
-export interface Pagination {
-  current_page: number;
-  total_pages: number;
-  total_entries: number;
-  per_page: number;
-  time: number;
-}
-
-export interface VintedSearchResult {
+export interface VintedSearchResult extends VintedPaginatedResponse {
   items: Item[];
   dominant_brand: DominantBrand;
   search_tracking_params: SearchTrackingParams2;
-  pagination: Pagination;
-  code: number;
-  proxy?: string;
 }
