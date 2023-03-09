@@ -48,6 +48,12 @@ export default class VintedScraper {
     return this.#request<VintedUserResponse>(`https://www.vinted.de/api/v2/users/${id}`);
   }
 
+  /**
+   * Fetch all items for given user.
+   *
+   * @param id { number } User ID.
+   * @returns { VintedUserItemsResponse }
+   */
   async fetchUserItems(id: number): Promise<VintedUserItemsResponse> {
     const itemsPerPage = 200000;
     const url = `https://www.vinted.be/api/v2/users/${id}/items?page=1&per_page=${itemsPerPage}`;
